@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -89,7 +89,7 @@ const Dashboard: React.FC = () => {
             locale="ja-JP" // 週の始まりを日曜日に設定
             calendarType="gregory" // 週の始まりを日曜日に強制
             className="border-none"
-            formatDay={(locale, date) => date.getDate().toString()}
+            formatDay={(_, date) => date.getDate().toString()}
             tileClassName={({ date, view }) => {
               if (view === 'month') {
                 const classNames = [];

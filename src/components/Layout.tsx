@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { Dialog, Transition } from '@headlessui/react';
 import {
-    HomeIcon, ChatBubbleLeftRightIcon, BriefcaseIcon, QuestionMarkCircleIcon, WrenchScrewdriverIcon, BuildingOffice2Icon, Cog8ToothIcon, SparklesIcon, Bars3Icon, XMarkIcon, ArrowRightOnRectangleIcon, ChevronDownIcon, CurrencyYenIcon,
+    HomeIcon, ChatBubbleLeftRightIcon, BriefcaseIcon, WrenchScrewdriverIcon, BuildingOffice2Icon, Cog8ToothIcon, SparklesIcon, Bars3Icon, XMarkIcon, ArrowRightOnRectangleIcon, ChevronDownIcon, CurrencyYenIcon,
 } from '@heroicons/react/24/outline';
 
 interface SubMenuItem {

@@ -1,8 +1,7 @@
-import { useState } from "react";
+import React, { useState } from 'react';
 import type { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
-import { useEffect } from "react";
 
 const Login = () => {
   const [email, setEmail] = useState("");
