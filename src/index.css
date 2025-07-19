@@ -4,7 +4,7 @@
 
 @layer base {
   body {
-    @apply bg-background text-text;
+    @apply bg-sub-background-gray text-gray-900;
     font-family: "Noto Sans JP", sans-serif;
   }
 }
@@ -39,4 +39,19 @@
       opacity: 1;
     }
   }
+}
+
+/* react-calendar custom styles */
+.maintenance-day {
+  background-color: #ff9933; /* accent-orange */
+  color: white !important; /* !important to override default styles */
+  border-radius: 9999px; /* rounded-full */
+}
+
+.saturday {
+  color: #1e6fd9 !important; /* primary-blue, !importantを追加 */
+}
+
+.sunday-holiday {
+  color: #ef4444 !important; /* red-500, !importantを追加 */
 }

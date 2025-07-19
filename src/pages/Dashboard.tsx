@@ -1,192 +1,121 @@
-import { useAuth } from "../contexts/AuthContext";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+import holiday_jp from '@holiday-jp/holiday_jp';
 
-const Dashboard = () => {
-  const { user } = useAuth();
-
+const Dashboard: React.FC = () => {
   return (
-    <div>
-      <h1 className="text-2xl font-semibold text-gray-900">ダッシュボード</h1>
-
-      <div className="mt-6">
-        <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-          <div className="px-4 py-5 sm:px-6">
-            <h2 className="text-lg leading-6 font-medium text-gray-900">
-              ユーザー情報
-            </h2>
-            <p className="mt-1 max-w-2xl text-sm text-gray-500">
-              ログインユーザーの基本情報
-            </p>
-          </div>
-          <div className="border-t border-gray-200">
-            <dl>
-              <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">名前</dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {user?.name}
-                </dd>
-              </div>
-              <div className="bg-white px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">
-                  メールアドレス
-                </dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {user?.email}
-                </dd>
-              </div>
-              <div className="bg-gray-50 px-4 py-5 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-6">
-                <dt className="text-sm font-medium text-gray-500">
-                  ユーザーID
-                </dt>
-                <dd className="mt-1 text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-                  {user?.id}
-                </dd>
-              </div>
-            </dl>
-          </div>
-        </div>
+    <div className="container mx-auto px-4 py-8">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-3xl font-bold text-gray-800">ダッシュボード</h1>
+        <Link to="/profile" className="p-3 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors">
+            <div className="flex items-center space-x-4 text-sm">
+                <div>
+                    <span className="font-semibold text-gray-600">現在のランク: </span>
+                    <span className="font-bold text-amber-600">🥉 BRONZE</span>
+                </div>
+                <div className="border-l pl-4">
+                    <span className="font-semibold text-gray-600">連続ログイン: </span>
+                    <span className="font-bold text-gray-800">15日</span>
+                </div>
+            </div>
+        </Link>
       </div>
 
-      <div className="mt-8 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-        {/* カード1 */}
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="px-4 py-5 sm:p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0 bg-blue-500 rounded-md p-3">
-                <svg
-                  className="h-6 w-6 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-                  />
-                </svg>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    サンプルデータ1
-                  </dt>
-                  <dd>
-                    <div className="text-lg font-medium text-gray-900">
-                      12,345
-                    </div>
-                  </dd>
-                </dl>
-              </div>
-            </div>
-          </div>
-          <div className="bg-gray-50 px-4 py-4 sm:px-6">
-            <div className="text-sm">
-              <a
-                href="#"
-                className="font-medium text-blue-600 hover:text-blue-500"
-              >
-                詳細を見る
-              </a>
-            </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {/* 未読メッセージ */}
+        <Link to="/inbox" state={{ filter: 'unread_messages' }} className="block bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <h2 className="text-xl font-semibold mb-2 text-primary-blue">未読メッセージ</h2>
+          <p className="text-3xl font-bold">5件</p>
+        </Link>
+
+        {/* 未対応の相談 */}
+        <Link to="/inbox" state={{ filter: 'unanswered_consultations' }} className="block bg-white p-6 rounded-lg shadow-md hover:shadow-lg transition-shadow">
+          <h2 className="text-xl font-semibold mb-2 text-primary-blue">未対応の相談</h2>
+          <p className="text-3xl font-bold">2件</p>
+        </Link>
+
+        {/* クイックアクセス */}
+        <div className="bg-white p-6 rounded-lg shadow-md col-span-1 md:col-span-2">
+          <h2 className="text-xl font-semibold mb-4 text-primary-blue">クイックアクセス</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <Link to="/support/how-to" className="block text-center bg-accent-orange/90 text-white font-bold py-3 px-4 rounded-lg hover:bg-accent-orange">
+              新規相談
+            </Link>
+            <Link to="/consultation/new-system" className="block text-center bg-accent-orange/90 text-white font-bold py-3 px-4 rounded-lg hover:bg-accent-orange">
+              見積依頼
+            </Link>
+            <Link to="/knowledge-base" className="block text-center bg-sub-light-blue text-white font-bold py-3 px-4 rounded-lg hover:bg-primary-blue">
+              ナレッジ検索
+            </Link>
+            <Link to="/contracts" className="block text-center bg-sub-light-blue text-white font-bold py-3 px-4 rounded-lg hover:bg-primary-blue">
+              保守契約確認
+            </Link>
           </div>
         </div>
 
-        {/* カード2 */}
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="px-4 py-5 sm:p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0 bg-green-500 rounded-md p-3">
-                <svg
-                  className="h-6 w-6 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
-                  />
-                </svg>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    サンプルデータ2
-                  </dt>
-                  <dd>
-                    <div className="text-lg font-medium text-gray-900">
-                      67.8%
-                    </div>
-                  </dd>
-                </dl>
-              </div>
-            </div>
+        {/* お知らせ */}
+        <div className="bg-white p-6 rounded-lg shadow-md col-span-1 md:col-span-2 lg:col-span-4">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-xl font-semibold text-primary-blue">お知らせ</h2>
+            <Link to="/announcements" className="text-sm font-bold text-primary-blue hover:text-accent-orange">すべて見る →</Link>
           </div>
-          <div className="bg-gray-50 px-4 py-4 sm:px-6">
-            <div className="text-sm">
-              <a
-                href="#"
-                className="font-medium text-green-600 hover:text-green-500"
-              >
-                詳細を見る
-              </a>
-            </div>
-          </div>
+          <ul>
+            <li className="border-b py-2">【重要】サーバーメンテナンスのお知らせ（2023/10/28）</li>
+            <li className="border-b py-2">新しいセキュリティ製品のご案内</li>
+            <li className="py-2">年末年始のサポート対応について</li>
+          </ul>
         </div>
 
-        {/* カード3 */}
-        <div className="bg-white overflow-hidden shadow rounded-lg">
-          <div className="px-4 py-5 sm:p-6">
-            <div className="flex items-center">
-              <div className="flex-shrink-0 bg-purple-500 rounded-md p-3">
-                <svg
-                  className="h-6 w-6 text-white"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M13 10V3L4 14h7v7l9-11h-7z"
-                  />
-                </svg>
-              </div>
-              <div className="ml-5 w-0 flex-1">
-                <dl>
-                  <dt className="text-sm font-medium text-gray-500 truncate">
-                    サンプルデータ3
-                  </dt>
-                  <dd>
-                    <div className="text-lg font-medium text-gray-900">
-                      9,876
-                    </div>
-                  </dd>
-                </dl>
-              </div>
+        {/* 最新のやりとり */}
+        <div className="bg-white p-6 rounded-lg shadow-md col-span-1 md:col-span-2 lg:col-span-2">
+            <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold text-primary-blue">最新のやりとり履歴</h2>
+                <Link to="/history" className="text-sm font-bold text-primary-blue hover:text-accent-orange">すべて見る →</Link>
             </div>
-          </div>
-          <div className="bg-gray-50 px-4 py-4 sm:px-6">
-            <div className="text-sm">
-              <a
-                href="#"
-                className="font-medium text-purple-600 hover:text-purple-500"
-              >
-                詳細を見る
-              </a>
-            </div>
-          </div>
+            <ul>
+                <li className="border-b py-2">PCの動作が遅い件について、担当者から返信がありました。</li>
+                <li className="border-b py-2">複合機のトナー交換の見積依頼を送信しました。</li>
+                <li className="py-2">ネットワーク設定の変更依頼が完了しました。</li>
+            </ul>
         </div>
+        
+        {/* カレンダー */}
+        <div className="bg-white p-6 rounded-lg shadow-md col-span-1 md:col-span-2 lg:col-span-2 flex flex-col items-center">
+          <h2 className="text-xl font-semibold mb-4 text-primary-blue w-full">保守スケジュール</h2>
+          <Calendar
+            key="ja-JP-calendar" // key を追加して再描画を強制
+            locale="ja-JP" // 週の始まりを日曜日に設定
+            calendarType="gregory" // 週の始まりを日曜日に強制
+            className="border-none"
+            formatDay={(locale, date) => date.getDate().toString()}
+            tileClassName={({ date, view }) => {
+              if (view === 'month') {
+                const classNames = [];
+                // サーバーメンテナンス日
+                if (date.getDate() === 28 && date.getMonth() === 9) {
+                  classNames.push('maintenance-day');
+                }
+                // 祝日判定
+                if (holiday_jp.isHoliday(date)) {
+                  classNames.push('sunday-holiday');
+                }
+                // 曜日判定
+                else if (date.getDay() === 0) { // 日曜日
+                  classNames.push('sunday-holiday');
+                } else if (date.getDay() === 6) { // 土曜日
+                  classNames.push('saturday');
+                }
+                return classNames.join(' ');
+              }
+            }}
+          />
+        </div>
+
       </div>
     </div>
   );
 };
 
-export default Dashboard;
+export default Dashboard; 
